@@ -1,8 +1,10 @@
+
+
+
 const Header = ({ course }) => <h1>{course}</h1>
 
-
 const Part = ({ part }) => {
-  console.log(part)
+ 
   return (
     <div>
       {part.name} {part.exercises}
@@ -24,52 +26,93 @@ const Course = (props) => {
     <div>
 
       <Header course={props.course.name} />
-      <Content parts={props.course.parts} />
+      <Content parts={props.course.parts}/>
+      <Total total ={props.course.parts} />
 
+    </div>
+  )
+}
+const Total= ({total}) => {
+ 
+
+  return(
+    <div>
+      It has {total.reduce(function (acc, curr) {
+    return acc + curr.exercises
+  }, 0)} exercises
     </div>
   )
 }
 
 
 
-function App() {
+const App = () => {
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    },
 
-  const course = {
-    id: 1,
-    name: 'Half Stack application development ',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      },
 
-    ]
-  }
+  ]
 
-  const total = course.parts.reduce(function (acc, curr) {
-    return acc + curr.exercises
-  }, 0)
-  return (
+
+
+return (
 
     <div>
 
+      {courses.map(item => {
+        return (
+          
+          <Course course={item} key={courses.indexOf(item)}/>
+          
+        )
+      })
+      }
 
-      <Course course={course} />
-      <div>{console.log(total)}</div>
-      <div>Total Exercises: {total}</div>
+
+
     </div>
   )
-}
+};
 
 export default App

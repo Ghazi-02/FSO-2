@@ -13,22 +13,25 @@ const Part = ({ part }) => {
 const Content = ({ parts }) => {
   return (
     <div>
-      {parts.map(item => (<Part part={item} />))}
+      {parts.map(item => (<Part part={item} key={item.id} />))}
     </div>)
 }
 
 const Course = (props) => {
- 
+
 
   return (
     <div>
 
-      <Header course = {props.course.name}/>
-      <Content parts = {props.course.parts} />
+      <Header course={props.course.name} />
+      <Content parts={props.course.parts} />
 
     </div>
   )
 }
+
+
+
 function App() {
 
   const course = {
@@ -53,12 +56,18 @@ function App() {
 
     ]
   }
+
+  const total = course.parts.reduce(function (acc, curr) {
+    return acc + curr.exercises
+  }, 0)
   return (
 
     <div>
- 
+
 
       <Course course={course} />
+      <div>{console.log(total)}</div>
+      <div>Total Exercises: {total}</div>
     </div>
   )
 }

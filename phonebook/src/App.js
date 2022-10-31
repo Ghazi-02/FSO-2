@@ -8,7 +8,10 @@ const App = (props) => {
   const [persons, setPersons] = useState(props.persons)
 
   const [newName, setNewName] = useState('')
-  
+
+  const [newNumbers, setNewNumbers] = useState("")
+
+
 
 
 
@@ -17,23 +20,28 @@ const App = (props) => {
     const personsObject = {
       name: newName,
       id: persons.length + 1,
+      number: newNumbers,
     }
-   
+
 
     event.preventDefault()
-    if( (persons.map(element => element.name).includes(newName)) === true ){
-        return alert( `${newName} is a duplicate`)
+    if ((persons.map(element => element.name).includes(newName)) === true) {
+      return alert(`${newName} is a duplicate`)
 
-    }else {
-    setPersons(persons.concat(personsObject))
-    setNewName('')
-    console.log(persons.map(element => element.name).includes(newName))
-    console.log(persons)
+    } else {
+      setPersons(persons.concat(personsObject))
+      setNewName('')
+      setNewNumbers('')
+      console.log(personsObject)
     }
   }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumbers(event.target.value)
   }
 
   return (
@@ -43,22 +51,26 @@ const App = (props) => {
       <form onSubmit={addName}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
+          <div>
+            number <input value={newNumbers} onChange={handleNumberChange} />
+          </div>
         </div>
         <div>
           <button type="submit">add</button>
         </div>
+
+
+        <h2>Numbers</h2>
+
       </form>
-      <h2>Numbers</h2>
-      <div>
+      {persons.map(person =>
+        <Person person={person} number={person.numbers} key={person.id} />
+      )}
 
-        {persons.map(person =>
-          <Person person={person} key={person.id} />
-        )}
-
-      </div>
-    
-  
     </div>
+
+
+
   )
 }
 

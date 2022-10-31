@@ -9,14 +9,18 @@ const App = (props) => {
 
   const [newName, setNewName] = useState('')
 
-  const [newNumbers, setNewNumbers] = useState("")
+  const [newNumbers, setNewNumbers] = useState('')
+
+  const [showAll, setShowAll] = useState('false')
 
 
 
-
+  const personsToShow = showAll 
+  ? persons.filter(element => element.name.toUpperCase().includes(showAll.toUpperCase()))
+  : persons
 
   const addName = (event) => {
-
+    event.preventDefault()
     const personsObject = {
       name: newName,
       id: persons.length + 1,
@@ -24,11 +28,13 @@ const App = (props) => {
     }
 
 
-    event.preventDefault()
+
+
     if ((persons.map(element => element.name).includes(newName)) === true) {
-      return alert(`${newName} is a duplicate`)
+      return alert(`${newName} is a duplicate`);
 
     } else {
+
       setPersons(persons.concat(personsObject))
       setNewName('')
       setNewNumbers('')
@@ -43,16 +49,22 @@ const App = (props) => {
   const handleNumberChange = (event) => {
     setNewNumbers(event.target.value)
   }
+  const handleFilterChange = (event) => {
+    setShowAll(event.target.value)
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-
+      filter shown with <input value={showAll} onChange={handleFilterChange} />
       <form onSubmit={addName}>
+        <h2>add a new</h2>
         <div>
+
+
           name: <input value={newName} onChange={handleNameChange} />
           <div>
-            number <input value={newNumbers} onChange={handleNumberChange} />
+            number: <input value={newNumbers} onChange={handleNumberChange} />
           </div>
         </div>
         <div>
@@ -60,10 +72,11 @@ const App = (props) => {
         </div>
 
 
+
         <h2>Numbers</h2>
 
       </form>
-      {persons.map(person =>
+      {personsToShow.map(person =>
         <Person person={person} number={person.numbers} key={person.id} />
       )}
 

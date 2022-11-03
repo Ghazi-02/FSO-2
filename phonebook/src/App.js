@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Person from './components/Persons'
+import axios from 'axios'
+
 
 
 const Filter = ({ onchange, input }) => {
@@ -19,12 +21,22 @@ const NameAndNumber = ({ addon, onchange, input }) => {
     </div>
   )
 }
-const App = (props) => {
+const App = () => {
 
-  const [persons, setPersons] = useState(props.persons)
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
+
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
+
+  useEffect(hook, [])
 
   const personsToShow = showAll
     ? persons.filter(element => element.name.toUpperCase().includes(showAll.toUpperCase()))

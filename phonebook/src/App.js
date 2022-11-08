@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react'
 import Person from './components/Persons'
 import personService from './services/persons'
@@ -28,11 +29,21 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
 
+  const removeElement = (id) => {
+    
+    personService
+    .remove(id)
+    setPersons(persons.filter(person => person.id !== id))
+
+  
+    
+  }
   const hook = () => {
     personService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+
       })
   }
 
@@ -46,8 +57,8 @@ const App = () => {
     event.preventDefault()
     const personsObject = {
       name: newName,
-      id: persons.length + 1,
       number: newNumber,
+      id: Math.random,
     }
 
     if ((persons.map(element => element.name).includes(newName)) === true) {
@@ -55,8 +66,8 @@ const App = () => {
     } else {
       personService
         .create(personsObject)
-        .then(returnedNote => {
-          setPersons(persons.concat(returnedNote))
+        .then(returnedPersons => {
+          setPersons(persons.concat(returnedPersons))
           setNewName('')
           setNewNumber('')
           console.log(personsObject)
@@ -91,7 +102,11 @@ const App = () => {
         <h2>Numbers</h2>
       </form>
       {personsToShow.map(person =>
-        <Person person={person} number={person.numbers} key={person.id} />
+        <Person 
+         person={person}
+         number={person.numbers}
+         key={person.id}
+         remove={()=>removeElement(person.id)} />
       )}
 
     </div>

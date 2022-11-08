@@ -1,14 +1,11 @@
 
-const Person = ({ person }) => {
+const Person =({person,remove}) => {
   return (
-    <div>{person.name} {person.number}</div>
+    <div>
+      {person.name} {person.number} <button onClick={remove}>Delete</button>
+      </div>
   )
 }
 
-const Filter = ({ filter }) => {
-  return (
-    <div></div>
-    
-    )
-}
+
 export default Person

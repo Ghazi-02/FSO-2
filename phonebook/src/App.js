@@ -53,10 +53,14 @@ const App = () => {
     if ((persons.map(element => element.name).includes(newName)) === true) {
       return alert(`${newName} is a duplicate`)
     } else {
-      setPersons(persons.concat(personsObject))
+      axios
+      .post("http://localhost:3001/persons",personsObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
       setNewName('')
       setNewNumber('')
       console.log(personsObject)
+      })
     }
   }
 

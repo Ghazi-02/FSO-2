@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Person from './components/Persons'
-import axios from 'axios'
+import personService from './services/persons'
 
 
 
@@ -29,10 +29,10 @@ const App = () => {
   const [showAll, setShowAll] = useState('')
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }
 
@@ -53,14 +53,14 @@ const App = () => {
     if ((persons.map(element => element.name).includes(newName)) === true) {
       return alert(`${newName} is a duplicate`)
     } else {
-      axios
-      .post("http://localhost:3001/persons",personsObject)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-      setNewName('')
-      setNewNumber('')
-      console.log(personsObject)
-      })
+      personService
+        .create(personsObject)
+        .then(returnedNote => {
+          setPersons(persons.concat(returnedNote))
+          setNewName('')
+          setNewNumber('')
+          console.log(personsObject)
+        })
     }
   }
 

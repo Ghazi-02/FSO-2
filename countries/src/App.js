@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({ country }) => {
+const Country = ({ countries }) => {
+
   return (
-    <li>
-      {country.name}
-    </li>
+    <div>
+      <h1>{countries.name}</h1>
+      <div>Capital {countries.capital}</div>
+      <div>Area {countries.area}</div>
+      <h4>Languages</h4>
+      <div>{countries.languages.map(language => <li>{language.name}</li>)}</div>
+      <img src={countries.flag} alt={'flag'} />
+
+    </div>
   )
 }
 
@@ -29,6 +36,7 @@ function App() {
       .get('https://restcountries.com/v2/all')
       .then(response => {
         setCountries(response.data)
+
 
       })
   })
@@ -54,14 +62,33 @@ function App() {
           />
         )} */}
 
-        {countriesToShow.length < 10
+        {/* {countriesToShow.length < 10
           ? countriesToShow.map(country =>
             <Country
               country={country}
               key={country.id}
             />)
           : <div>Be more specific</div>
-        }
+        } */}
+        {(() => {
+          if (countriesToShow.length > 10) {
+            return (<div>Too many countries to list! Specify another filter.</div>
+
+            )
+          } else if (countriesToShow.length === 1) {
+            return (
+              countriesToShow.map(country =>
+                <Country
+                  countries={country}
+
+                />))
+          } else return (
+            countriesToShow.map(country =>
+              <div>{country.name}</div>
+            )
+          )
+
+        })()}
 
 
 

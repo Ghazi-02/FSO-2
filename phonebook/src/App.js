@@ -4,7 +4,16 @@ import Person from './components/Persons'
 import personService from './services/persons'
 
 
-
+const Notification = ({ message}) => {
+  if(message === null) {
+    return null
+  }
+  return ( 
+    <div className="alert">
+      {message}
+    </div>
+  )
+}
 const Filter = ({ onchange, input }) => {
 
   return (
@@ -28,7 +37,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
-
+  const [theMessage, setTheMessage] = useState(null)
   const removeElement = (id) => {
     
     personService
@@ -68,6 +77,12 @@ const App = () => {
         .create(personsObject)
         .then(returnedPersons => {
           setPersons(persons.concat(returnedPersons))
+          setTheMessage(
+            `${newName} was added to the server`
+          )
+          setTimeout(() => {
+            setTheMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
           console.log(personsObject)
@@ -91,6 +106,7 @@ const App = () => {
       <Filter input={showAll} onchange={handleFilterChange} />
 
       <h2>add a new</h2>
+      <Notification message ={theMessage}/>
       <form onSubmit={addName}>
         <div>
           <NameAndNumber addon="Name:" input={newName} onchange={handleNameChange} />

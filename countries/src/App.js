@@ -1,50 +1,54 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({ countries }) => {
 
+const Country = ({ countries }) => {
   return (
     <div>
-      <h1>{countries.name}</h1>
+      <h2>{countries.name}</h2>
       <div>Capital {countries.capital}</div>
       <div>Area {countries.area}</div>
       <h4>Languages</h4>
       <div>{countries.languages.map(language => <li>{language.name}</li>)}</div>
       <img src={countries.flag} alt={'flag'} />
-
     </div>
   )
 }
 
 const Filter = ({ onchange, input }) => {
-
   return (
     <div>
       Find countries<input value={input} onChange={onchange} />
     </div>
   )
 }
+const Show = ({countries}) => {
+  const [show,setShow]= useState(false)
+
+  return(
+    <div>     
+    {show ? <Country countries ={countries}/> : <div></div>}
+    <button onClick={() => setShow(!show)}>{show ? 'hide' : 'show'}</button>
+    </div>
+  )
+}
+
+
 
 function App() {
-
   const [countries, setCountries] = useState([])
   const [showAll, setShowAll] = useState('')
-
 
   useEffect(() => {
     axios
       .get('https://restcountries.com/v2/all')
       .then(response => {
         setCountries(response.data)
-
-
       })
   })
 
 
-
-  let countriesToShow = showAll ? countries.filter(element => element.name.toUpperCase().includes(showAll.toUpperCase())) : countries
-
+  const countriesToShow = showAll ? countries.filter(element => element.name.toUpperCase().includes(showAll.toUpperCase())) : countries
 
   const handleFilterChange = (event) => {
     setShowAll(event.target.value)
@@ -53,27 +57,9 @@ function App() {
     <div>
       <Filter input={showAll} onchange={handleFilterChange} />
       <div>
-
-        {/* {countriesToShow.map(country =>
-          <Country
-            country={country}
-            key={country.id}
-
-          />
-        )} */}
-
-        {/* {countriesToShow.length < 10
-          ? countriesToShow.map(country =>
-            <Country
-              country={country}
-              key={country.id}
-            />)
-          : <div>Be more specific</div>
-        } */}
         {(() => {
           if (countriesToShow.length > 10) {
             return (<div>Too many countries to list! Specify another filter.</div>
-
             )
           } else if (countriesToShow.length === 1) {
             return (
@@ -82,16 +68,15 @@ function App() {
                   countries={country}
 
                 />))
-          } else return (
-            countriesToShow.map(country =>
-              <div>{country.name}</div>
-            )
-          )
+          } else return countriesToShow.map(country => {
+              return (
+                <div>
+                  {country.name}<Show countries ={country}/>
 
+                </div>
+              )
+            })
         })()}
-
-
-
       </div>
 
     </div>

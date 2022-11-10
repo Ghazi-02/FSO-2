@@ -3,6 +3,18 @@ import axios from 'axios'
 
 
 const Country = ({ countries }) => {
+ const [weather,setWeather]=useState([])
+ 
+  useEffect(() => {
+    const api_key = process.env.REACT_APP_API_KEY
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${countries.latlng[0]}&lon=${countries.latlng[1]}&appid=${api_key}`)
+      .then(response => {
+        console.log(response.data)
+        setWeather(response.data)
+      })
+    })
+  
   return (
     <div>
       <h2>{countries.name}</h2>
@@ -11,6 +23,9 @@ const Country = ({ countries }) => {
       <h4>Languages</h4>
       <div>{countries.languages.map(language => <li>{language.name}</li>)}</div>
       <img src={countries.flag} alt={'flag'} />
+      <h4>Weather in {countries.name}</h4>
+      <div> {weather}</div>
+  
     </div>
   )
 }
@@ -38,7 +53,6 @@ const Show = ({countries}) => {
 function App() {
   const [countries, setCountries] = useState([])
   const [showAll, setShowAll] = useState('')
-
   useEffect(() => {
     axios
       .get('https://restcountries.com/v2/all')

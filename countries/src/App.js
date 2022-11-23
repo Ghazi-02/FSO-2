@@ -1,3 +1,5 @@
+//
+
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -7,6 +9,7 @@ const Country = ({ countries }) => {
  
   useEffect(() => {
     const api_key = process.env.REACT_APP_API_KEY
+    
     axios
       .get(`https://api.openweathermap.org/data/2.5/weather?lat=${countries.latlng[0]}&lon=${countries.latlng[1]}&appid=${api_key}`)
       .then(response => {
@@ -24,7 +27,7 @@ const Country = ({ countries }) => {
       <div>{countries.languages.map(language => <li>{language.name}</li>)}</div>
       <img src={countries.flag} alt={'flag'} />
       <h4>Weather in {countries.name}</h4>
-      <div> {weather}</div>
+      <div>{weather.base}</div>
   
     </div>
   )
